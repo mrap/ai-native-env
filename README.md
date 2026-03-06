@@ -47,6 +47,34 @@ clonerepo https://github.com/user/repo
 # Clones to ~/github.com/user/repo via SSH
 ```
 
+## Personal CLAUDE.md Wizard
+
+Your personal `~/.claude/CLAUDE.md` is the most important file in your AI setup.
+It tells Claude who you are, how you work, and what you care about — across every
+project and session.
+
+The wizard builds one interactively. Works for **anyone** — engineers, PMs,
+designers, data analysts, writers.
+
+Open Claude Code and say:
+```
+Follow the wizard at PERSONAL_CLAUDE_MD_WIZARD.md to build my personal CLAUDE.md.
+```
+
+See [PERSONAL_CLAUDE_MD_WIZARD.md](PERSONAL_CLAUDE_MD_WIZARD.md) for details.
+
+## AI-Native Progression
+
+The wizard includes a **Bronze → Silver → Gold → Diamond → World Class** progression
+system. You don't write a perfect CLAUDE.md — you grow one through real usage.
+
+To get coached on your current level and next steps:
+```
+Follow skills/ai-native-coach/SKILL.md to assess my AI-native level.
+```
+
+See [skills/ai-native-coach/SKILL.md](skills/ai-native-coach/SKILL.md).
+
 ## Claude Code Methodology
 
 See [claude/METHODOLOGY.md](claude/METHODOLOGY.md) for how the Claude Code

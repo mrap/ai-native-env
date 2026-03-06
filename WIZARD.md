@@ -163,6 +163,22 @@ Give the user a brief tour of what they now have:
 - "In vim, press `Space` then `w` to save, `Space` then `q` to quit"
 - "Use `clonerepo https://github.com/user/repo` to clone repos into the right place"
 
+### Step 11: Personal CLAUDE.md
+
+After the environment is set up, offer to run the Personal CLAUDE.md Wizard:
+
+"Now that your environment is ready, let's personalize how Claude works with you.
+This creates a personal instruction file that follows you across every project."
+
+```
+Follow the wizard at PERSONAL_CLAUDE_MD_WIZARD.md to build my personal CLAUDE.md.
+```
+
+This step is optional but highly recommended. It takes 10-30 minutes and makes
+every future Claude session better. Works for technical and non-technical users.
+
+See [PERSONAL_CLAUDE_MD_WIZARD.md](PERSONAL_CLAUDE_MD_WIZARD.md).
+
 ## Customization Points
 
 The wizard should ask about these and adjust accordingly:

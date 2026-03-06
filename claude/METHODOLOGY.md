@@ -82,6 +82,22 @@ the project. The structure follows this pattern:
 - Reference companion docs (`docs/PLAN.md`, `docs/DESIGN.md`) for deep dives
 - Keep it under ~150 lines — this is a quick reference, not a novel
 
+## Personal CLAUDE.md (User-Level)
+
+Beyond project-level CLAUDE.md files, every user should have a personal
+`~/.claude/CLAUDE.md` that captures their identity, working style, boundaries,
+and tool preferences. This follows them across all projects.
+
+Build one with the [Personal CLAUDE.md Wizard](../PERSONAL_CLAUDE_MD_WIZARD.md).
+
+The personal CLAUDE.md includes an **AI-Native Progression** section that tracks
+growth from Bronze (first real usage) through World Class (personal AI OS).
+Use the [AI-Native Coach](../skills/ai-native-coach/SKILL.md) to assess your
+current level and get coached to the next one.
+
+This system works for anyone — engineers, PMs, designers, analysts, writers.
+The concepts are universal; only the examples change.
+
 ## Project Memory
 
 Claude Code maintains per-project memory at:
