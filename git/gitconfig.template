@@ -1,0 +1,11 @@
+[user]
+  name = __USER_NAME__
+  email = __USER_EMAIL__
+
+[init]
+        defaultBranch = main
+[alias]
+        changes = "!f(){ \\\n  range=\"${1:-HEAD}\"; \\\n  if git rev-parse --verify --quiet \"$range\" >/dev/null; then \\\n    range=\"$range^..$range\"; \\\n  fi; \\\n  git log --no-merges --date=short --pretty=format:\"%C(auto)%h %ad %s%Creset\" --name-only \"$range\" \\\n  | awk '\\\n      /^[0-9a-f]{7,} / { \\\n        if (seen++) print \"\"; \\\n        print $0; \\\n        next \\\n      } \\\n      NF { print \"  - \" $0 } \\\n    '; \\\n}; f"
+        lg = log --graph --decorate --all --date=relative --pretty=format:%C(auto)%h%Creset\ %C(dim\ white)%ad%Creset\ %s
+[core]
+        excludesfile = ~/.gitignore_global

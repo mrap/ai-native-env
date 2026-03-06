@@ -1,0 +1,27 @@
+add_newline = false
+
+[character]
+success_symbol = "[>](bold green)"
+error_symbol = "[x](bold red)"
+
+[directory]
+truncation_length = 3
+truncate_to_repo = true
+
+[git_branch]
+symbol = " "
+
+[git_status]
+ahead = "^${count}"
+behind = "v${count}"
+diverged = "^${ahead_count}v${behind_count}"
+
+[nodejs]
+symbol = " "
+
+[docker_context]
+symbol = " "
+
+[cmd_duration]
+min_time = 2_000
+show_milliseconds = false
