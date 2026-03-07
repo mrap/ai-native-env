@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
-# Interactive installer for dotfiles
+# Interactive installer for ai-native-env
 # Designed to be run by Claude Code following WIZARD.md
 # Can also be run standalone for quick setup
 set -euo pipefail
 
-DOTFILES_DIR="$(cd "$(dirname "$0")/.." && pwd)"
+REPO_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 
-echo "=== Dotfiles Installer ==="
-echo "Source: $DOTFILES_DIR"
+echo "=== ai-native-env Installer ==="
+echo "Source: $REPO_DIR"
 echo ""
 
 # --- Gather info ---
@@ -33,14 +33,14 @@ deploy() {
 
 echo ""
 echo "Deploying configs..."
-deploy "$DOTFILES_DIR/zsh/zshrc" "$HOME/.zshrc" "zshrc"
-deploy "$DOTFILES_DIR/starship/starship.toml" "$HOME/.config/starship.toml" "starship"
-deploy "$DOTFILES_DIR/nvim/init.lua" "$HOME/.config/nvim/init.lua" "neovim"
-deploy "$DOTFILES_DIR/tmux/tmux.conf" "$HOME/.config/tmux/tmux.conf" "tmux"
+deploy "$REPO_DIR/zsh/zshrc" "$HOME/.zshrc" "zshrc"
+deploy "$REPO_DIR/starship/starship.toml" "$HOME/.config/starship.toml" "starship"
+deploy "$REPO_DIR/nvim/init.lua" "$HOME/.config/nvim/init.lua" "neovim"
+deploy "$REPO_DIR/tmux/tmux.conf" "$HOME/.config/tmux/tmux.conf" "tmux"
 
 # Git config with substitution
 sed "s/__USER_NAME__/$USER_NAME/g; s/__USER_EMAIL__/$USER_EMAIL/g" \
-  "$DOTFILES_DIR/git/gitconfig.template" > "$HOME/.gitconfig.new"
+  "$REPO_DIR/git/gitconfig.template" > "$HOME/.gitconfig.new"
 if [ -f "$HOME/.gitconfig" ]; then
   cp "$HOME/.gitconfig" "$HOME/.gitconfig.backup.$(date +%s)"
   echo "  Backed up existing gitconfig"
@@ -50,7 +50,7 @@ echo "  Installed gitconfig"
 
 # Claude settings
 mkdir -p "$HOME/.claude"
-deploy "$DOTFILES_DIR/claude/settings.json" "$HOME/.claude/settings.json" "claude settings"
+deploy "$REPO_DIR/claude/settings.json" "$HOME/.claude/settings.json" "claude settings"
 
 # Secrets file
 if [ ! -f "$HOME/.secrets" ]; then

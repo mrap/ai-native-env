@@ -8,7 +8,7 @@ Open Claude Code on the new machine and paste:
 
 ```
 I want to set up my development environment. Follow the wizard in this repo:
-https://github.com/mrap/dotfiles
+https://github.com/mrap/ai-native-env
 Clone it and follow WIZARD.md step by step. Ask me questions along the way.
 ```
 

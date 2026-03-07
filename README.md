@@ -1,4 +1,4 @@
-# dotfiles
+# ai-native-env
 
 Mike's development environment configuration, packaged for replication.
 
@@ -17,14 +17,14 @@ Mike's development environment configuration, packaged for replication.
 
 ```bash
 # Clone
-git clone git@github.com:mrap/dotfiles.git ~/github.com/mrap/dotfiles
+git clone git@github.com:mrap/ai-native-env.git ~/github.com/mrap/ai-native-env
 
 # Symlink what you want
-ln -sf ~/github.com/mrap/dotfiles/zsh/zshrc ~/.zshrc
-ln -sf ~/github.com/mrap/dotfiles/starship/starship.toml ~/.config/starship.toml
-ln -sf ~/github.com/mrap/dotfiles/nvim/init.lua ~/.config/nvim/init.lua
-ln -sf ~/github.com/mrap/dotfiles/tmux/tmux.conf ~/.config/tmux/tmux.conf
-cp ~/github.com/mrap/dotfiles/claude/settings.json ~/.claude/settings.json
+ln -sf ~/github.com/mrap/ai-native-env/zsh/zshrc ~/.zshrc
+ln -sf ~/github.com/mrap/ai-native-env/starship/starship.toml ~/.config/starship.toml
+ln -sf ~/github.com/mrap/ai-native-env/nvim/init.lua ~/.config/nvim/init.lua
+ln -sf ~/github.com/mrap/ai-native-env/tmux/tmux.conf ~/.config/tmux/tmux.conf
+cp ~/github.com/mrap/ai-native-env/claude/settings.json ~/.claude/settings.json
 ```
 
 ## Setting Up Someone Else
@@ -34,7 +34,7 @@ person through the full setup. See [WIZARD.md](WIZARD.md).
 
 Open Claude Code and say:
 ```
-Clone https://github.com/mrap/dotfiles and follow WIZARD.md to set up my environment.
+Clone https://github.com/mrap/ai-native-env and follow WIZARD.md to set up my environment.
 ```
 
 ## Directory Convention
