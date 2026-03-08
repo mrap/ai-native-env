@@ -1,31 +1,58 @@
 # ai-native-env
 
-Mike's development environment configuration, packaged for replication.
+Development environment configuration — zsh, tmux, neovim, starship, git, and Claude Code settings.
+
+## Install
+
+One command:
+
+```bash
+bash <(curl -sL https://raw.githubusercontent.com/mrap/ai-native-env/main/install.sh)
+```
+
+Or clone first:
+
+```bash
+git clone https://github.com/mrap/ai-native-env.git ~/.ai-native-env
+cd ~/.ai-native-env && bash install.sh
+```
+
+The installer symlinks dotfiles, copies Claude settings, configures git (prompts for name/email), and backs up any existing files to `.backup-YYYY-MM-DD`.
 
 ## What's Included
 
-| Component | Description |
-|-----------|-------------|
-| **zsh** | Vi-mode shell with git/docker aliases, fzf integration, starship prompt |
-| **starship** | Minimal prompt with git status, node version, command duration |
-| **neovim** | Clean config: space leader, 2-space indent, relative numbers, persistent undo |
-| **tmux** | Ctrl+Space prefix, vi copy mode, TPM plugins, Claude Code status bar |
-| **git** | Sane defaults, custom `changes` and `lg` aliases |
-| **claude** | Plan mode, superpowers plugin, code-review, 6 marketplaces |
+| Component | Target | Description |
+|-----------|--------|-------------|
+| **zsh** | `~/.zshrc` | Vi-mode shell with git/docker aliases, fzf integration, starship prompt |
+| **tmux** | `~/.config/tmux/tmux.conf` | Ctrl+Space prefix, vi copy mode, TPM plugins, Claude Code status bar |
+| **starship** | `~/.config/starship.toml` | Minimal prompt with git status, node version, command duration |
+| **neovim** | `~/.config/nvim/init.lua` | Space leader, 2-space indent, relative numbers, persistent undo |
+| **git** | `~/.gitconfig` | Sane defaults, custom `changes` and `lg` aliases (copied from template) |
+| **claude** | `~/.claude/settings.json` | Plan mode, superpowers plugin, code-review, 6 marketplaces |
 
-## Quick Start (for yourself)
+## Prerequisites
+
+git is required. The installer checks for these and tells you how to install any that are missing:
+
+- tmux, zsh, neovim, fzf, starship
+
+## Uninstall
 
 ```bash
-# Clone
-git clone git@github.com:mrap/ai-native-env.git ~/github.com/mrap/ai-native-env
-
-# Symlink what you want
-ln -sf ~/github.com/mrap/ai-native-env/zsh/zshrc ~/.zshrc
-ln -sf ~/github.com/mrap/ai-native-env/starship/starship.toml ~/.config/starship.toml
-ln -sf ~/github.com/mrap/ai-native-env/nvim/init.lua ~/.config/nvim/init.lua
-ln -sf ~/github.com/mrap/ai-native-env/tmux/tmux.conf ~/.config/tmux/tmux.conf
-cp ~/github.com/mrap/ai-native-env/claude/settings.json ~/.claude/settings.json
+bash uninstall.sh
 ```
+
+Or if you used the curl install:
+
+```bash
+bash ~/.ai-native-env/uninstall.sh
+```
+
+Removes symlinks and restores backed-up originals. Optionally removes the cloned repo.
+
+## Customize
+
+Dotfiles are symlinked, so edit the source files directly and changes take effect immediately. Files that are copied (gitconfig, claude settings) need to be re-copied or re-run through the installer.
 
 ## Setting Up Someone Else
 
