@@ -201,6 +201,7 @@ main() {
     # Symlink dotfiles
     link_dotfile "$REPO_DIR/zsh/zshrc"              "$HOME/.zshrc"                   "zshrc"
     link_dotfile "$REPO_DIR/tmux/tmux.conf"         "$HOME/.config/tmux/tmux.conf"   "tmux.conf"
+    link_dotfile "$REPO_DIR/tmux/sesh-picker.sh"    "$HOME/.config/tmux/sesh-picker.sh" "sesh-picker.sh"
     link_dotfile "$REPO_DIR/starship/starship.toml"  "$HOME/.config/starship.toml"   "starship.toml"
     link_dotfile "$REPO_DIR/nvim/init.lua"           "$HOME/.config/nvim/init.lua"   "nvim/init.lua"
 
