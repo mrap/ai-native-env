@@ -178,3 +178,24 @@ mkcd() { mkdir -p "$1" && cd "$1"; }
 # =====================
 
 export PATH=/opt/homebrew/share/google-cloud-sdk/bin:"$PATH"
+
+# zoxide (smart cd)
+command -v zoxide &>/dev/null && eval "$(zoxide init zsh)"
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
+[ -s "$BUN_INSTALL/_bun" ] && source "$BUN_INSTALL/_bun"
+
+# =====================
+# agent-browser (Vercel)
+# =====================
+export AGENT_BROWSER_DEFAULT_TIMEOUT=30000
+# Launch Chrome with CDP for agent-browser auto-connect (macOS only)
+[[ "$(uname)" == "Darwin" ]] && alias chrome-debug='/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --remote-debugging-port=9222 &'
+
+alias claude-mem='bun "$HOME/.claude/plugins/marketplaces/thedotmack/plugin/scripts/worker-service.cjs"'
+
+[ -f "$HOME/.local/bin/env" ] && . "$HOME/.local/bin/env"
+fpath=("$HOME/.zfunc" $fpath)
+autoload -U compinit && compinit
