@@ -23,8 +23,8 @@ The installer symlinks dotfiles, copies Claude settings, configures git (prompts
 
 | Component | Target | Description |
 |-----------|--------|-------------|
-| **zsh** | `~/.zshrc` | Vi-mode shell with git/docker aliases, fzf integration, starship prompt |
-| **tmux** | `~/.config/tmux/tmux.conf` | Ctrl+Space prefix, vi copy mode, TPM plugins, Claude Code status bar |
+| **zsh** | `~/.zshrc` | Vi-mode shell with git/docker aliases, fzf integration (Catppuccin colors), zoxide smart cd, bun, starship prompt |
+| **tmux** | `~/.config/tmux/tmux.conf` | Ctrl+Space prefix, vi copy mode, TPM plugins, sesh session picker, Claude Code status bar |
 | **starship** | `~/.config/starship.toml` | Minimal prompt with git status, node version, command duration |
 | **neovim** | `~/.config/nvim/init.lua` | Space leader, 2-space indent, relative numbers, persistent undo |
 | **git** | `~/.gitconfig` | Sane defaults, custom `changes` and `lg` aliases (copied from template) |
@@ -35,6 +35,12 @@ The installer symlinks dotfiles, copies Claude settings, configures git (prompts
 git is required. The installer checks for these and tells you how to install any that are missing:
 
 - tmux, zsh, neovim, fzf, starship
+
+Optional (zshrc uses them if present, degrades gracefully if not):
+
+- zoxide — smart `cd` with frecency ranking (`brew install zoxide` / `apt install zoxide`)
+- bun — JavaScript runtime used by some Claude Code plugins (`curl -fsSL https://bun.sh/install | bash`)
+- sesh — tmux session manager used by the sesh-picker (`go install github.com/joshmedeski/sesh@latest`)
 
 ## Uninstall
 
