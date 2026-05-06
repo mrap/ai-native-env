@@ -69,6 +69,9 @@ fi
 # =====================
 # Aliases — Git
 # =====================
+alias g="git"
+alias gcm="git commit -m"
+alias gpl="git pull"
 alias gs="git status"
 alias ga="git add -A"
 alias gc="git commit -m"
@@ -95,6 +98,9 @@ clonerepo () {
 # Aliases — General
 # =====================
 alias ll="ls -alFh"
+# lst: long list sorted by modification time. Aliasing `ls` itself on portable machines
+# shadows the system ls and can break scripts; ll is the safe alternative.
+alias lst="ls -alFht"
 alias la="ls -A"
 alias ..="cd .."
 alias ...="cd ../.."
@@ -143,8 +149,13 @@ eval "$(/opt/homebrew/bin/brew shellenv)"
 # =====================
 # Hex Agent
 # =====================
-alias hex="bash ~/hex/.claude/scripts/workspace.sh"
-alias boi="bash ~/github.com/mrap/boi/boi.sh"
+export HEX_DIR="$HOME/mrap-hex"
+export AGENT_DIR="$HEX_DIR"
+if [ -d "$HEX_DIR" ]; then
+  export PATH="$HEX_DIR/.hex/bin:$PATH"
+  alias hex-new='cd $HEX_DIR && claude /hex-startup'
+fi
+alias boi="bash $HOME/github.com/mrap/boi/boi.sh"
 
 # =====================
 # Git helpers
