@@ -110,7 +110,13 @@ Explain each plugin to the user:
 - **superpowers** — "This gives Claude structured workflows. Instead of just
   diving in, Claude will brainstorm first, make a plan, then execute step by step.
   It's like having a senior engineer's discipline built in."
-- **code-review** — "Claude can review code like a teammate would."
+- **pyright-lsp** — "Type-aware Python editing. Claude uses Pyright to catch
+  type errors as it writes Python code."
+- **firebase** — "Firebase developer skills for Firestore, Auth, Hosting,
+  and more."
+- **ui-ux-pro-max** — "UI/UX design intelligence: styles, color palettes, font
+  pairings, component patterns."
+- **vercel** — "Deployment and infrastructure skills for Vercel projects."
 
 Ask: "Do you want all the plugin marketplaces registered? They give Claude access
 to community-made skills." (Default: yes)
