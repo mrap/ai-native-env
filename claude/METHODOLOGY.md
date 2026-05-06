@@ -20,7 +20,7 @@ before completion).
 
 ## Plugin System
 
-Three plugins are enabled:
+Five plugins are enabled:
 
 1. **`superpowers@superpowers-marketplace`** (obra/superpowers-marketplace)
    - The core skill system. Provides structured workflows:
@@ -37,24 +37,28 @@ Three plugins are enabled:
      - `using-git-worktrees` — Isolated feature work
      - `writing-skills` — Creating new skills
 
-2. **`superpowers@claude-plugins-official`** (anthropics/claude-plugins-official)
-   - Same superpowers plugin from the official Anthropic marketplace
+2. **`pyright-lsp@claude-plugins-official`** (anthropics/claude-plugins-official)
+   - Pyright LSP integration for type-aware Python editing
 
-3. **`code-review@claude-plugins-official`** (anthropics/claude-plugins-official)
-   - Structured code review capability
+3. **`firebase@firebase`** (firebase/agent-skills)
+   - Firebase developer skills for Firestore, Auth, Hosting, etc.
+
+4. **`ui-ux-pro-max@ui-ux-pro-max-skill`** (nextlevelbuilder/ui-ux-pro-max-skill)
+   - UI/UX design intelligence: styles, palettes, font pairings, component patterns
+
+5. **`vercel@claude-plugins-official`** (anthropics/claude-plugins-official)
+   - Vercel deployment and infrastructure skills
 
 ## Marketplace Registry
 
-Six marketplaces are registered (not all plugins from each are enabled):
+Four marketplaces are registered (not all plugins from each are enabled):
 
 | Marketplace | Repo | Purpose |
 |-------------|------|---------|
-| claude-plugins-official | anthropics/claude-plugins-official | Official Anthropic plugins |
-| superpowers-marketplace | obra/superpowers-marketplace | Structured workflow skills |
-| everything-claude-code | affaan-m/everything-claude-code | Community plugin collection |
-| jezweb-skills | jezweb/claude-skills | Additional community skills |
-| firebase | firebase/firebase-tools | Firebase tooling |
+| firebase | firebase/agent-skills | Firebase developer skills (auto-updated) |
 | ui-ux-pro-max-skill | nextlevelbuilder/ui-ux-pro-max-skill | UI/UX design skills |
+| claude-plugins-official | anthropics/claude-plugins-official | Official Anthropic plugins |
+| rust-skills | actionbook/rust-skills | Rust development skills |
 
 ## CLAUDE.md Methodology
 

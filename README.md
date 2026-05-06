@@ -28,7 +28,7 @@ The installer symlinks dotfiles, copies Claude settings, configures git (prompts
 | **starship** | `~/.config/starship.toml` | Minimal prompt with git status, node version, command duration |
 | **neovim** | `~/.config/nvim/init.lua` | Space leader, 2-space indent, relative numbers, persistent undo |
 | **git** | `~/.gitconfig` | Sane defaults, custom `changes` and `lg` aliases (copied from template) |
-| **claude** | `~/.claude/settings.json` | Plan mode, superpowers plugin, code-review, 6 marketplaces |
+| **claude** | `~/.claude/settings.json` | Plan mode, 5 plugins (superpowers, pyright, firebase, ui-ux, vercel), 4 marketplaces |
 
 ## Prerequisites
 
