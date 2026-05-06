@@ -13,7 +13,7 @@ choice=$(sesh list --icons | fzf-tmux -p 55%,60% \
   --bind 'ctrl-g:change-prompt(⚙️  )+reload(sesh list -c --icons)' \
   --bind 'ctrl-x:change-prompt(📁  )+reload(sesh list -z --icons)' \
   --bind 'ctrl-f:change-prompt(🔎  )+reload(fd -H -d 2 -t d -E .Trash . ~)' \
-  --bind 'ctrl-d:execute(tmux kill-session -t {2..})+reload(sesh list --icons)')
+  --bind "ctrl-d:execute-silent(bash -c 'target=\"{2..}\"; current=\"\$(tmux display-message -p \"#S\")\"; if [ \"\$target\" = \"\$current\" ]; then tmux switch-client -n; fi; tmux kill-session -t \"\$target\"')+reload(sesh list --icons)")
 
 if [[ "$choice" == NEW:* ]]; then
   name="${choice#NEW:}"
