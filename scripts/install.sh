@@ -2,7 +2,7 @@
 # Interactive installer for ai-native-env
 # Designed to be run by Claude Code following WIZARD.md
 # Can also be run standalone for quick setup
-set -euo pipefail
+set -uo pipefail
 
 REPO_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 
@@ -37,6 +37,7 @@ deploy "$REPO_DIR/zsh/zshrc" "$HOME/.zshrc" "zshrc"
 deploy "$REPO_DIR/starship/starship.toml" "$HOME/.config/starship.toml" "starship"
 deploy "$REPO_DIR/nvim/init.lua" "$HOME/.config/nvim/init.lua" "neovim"
 deploy "$REPO_DIR/tmux/tmux.conf" "$HOME/.config/tmux/tmux.conf" "tmux"
+deploy "$REPO_DIR/tmux/sesh-picker.sh" "$HOME/.config/tmux/sesh-picker.sh" "sesh-picker"
 
 # Git config with substitution
 sed "s/__USER_NAME__/$USER_NAME/g; s/__USER_EMAIL__/$USER_EMAIL/g" \
