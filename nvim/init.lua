@@ -6,6 +6,73 @@
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
+-- ============================================
+--  lazy.nvim bootstrap
+-- ============================================
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+if not vim.loop.fs_stat(lazypath) then
+  vim.fn.system({
+    "git", "clone", "--filter=blob:none",
+    "https://github.com/folke/lazy.nvim.git",
+    "--branch=stable",
+    lazypath,
+  })
+end
+vim.opt.rtp:prepend(lazypath)
+
+require("lazy").setup({
+  {
+    "sainnhe/everforest",
+    priority = 1000,
+    config = function()
+      vim.g.everforest_background = "medium"
+      vim.g.everforest_better_performance = 1
+      vim.cmd.colorscheme("everforest")
+    end,
+  },
+  {
+    "nvim-tree/nvim-tree.lua",
+    dependencies = { "nvim-tree/nvim-web-devicons" },
+    config = function()
+      vim.g.loaded_netrw = 1
+      vim.g.loaded_netrwPlugin = 1
+      require("nvim-tree").setup()
+      vim.api.nvim_create_autocmd("VimEnter", {
+        callback = function()
+          require("nvim-tree.api").tree.open()
+        end,
+      })
+    end,
+  },
+  {
+    "nvim-telescope/telescope.nvim",
+    branch = "0.1.x",
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      { "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
+    },
+    config = function()
+      local telescope = require("telescope")
+      local actions = require("telescope.actions")
+      telescope.setup({
+        defaults = {
+          prompt_prefix = "  ",
+          selection_caret = " ",
+          path_display = { "truncate" },
+          mappings = {
+            i = {
+              ["<C-k>"] = actions.move_selection_previous,
+              ["<C-j>"] = actions.move_selection_next,
+              ["<Esc>"] = actions.close,
+            },
+          },
+        },
+      })
+      telescope.load_extension("fzf")
+    end,
+  },
+})
+
 -- -- Core Behavior --
 vim.opt.swapfile = false           -- no swap files
 vim.opt.backup = false             -- no backup files
@@ -91,6 +158,15 @@ map("n", "N", "Nzzzv", opts)
 
 -- Better paste (don't lose register when pasting over selection)
 map("x", "p", [["_dP]], opts)
+
+-- File tree
+map("n", "<leader>n", "<cmd>NvimTreeToggle<CR>", opts)
+
+-- Fuzzy finder
+map("n", "<leader>t", "<cmd>Telescope find_files<CR>", opts)
+map("n", "<leader>fg", "<cmd>Telescope live_grep<CR>", opts)
+map("n", "<leader>fb", "<cmd>Telescope buffers<CR>", opts)
+map("n", "<leader>fh", "<cmd>Telescope help_tags<CR>", opts)
 
 -- Quick save / quit
 map("n", "<leader>w", "<cmd>w<CR>", opts)
