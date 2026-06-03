@@ -71,6 +71,22 @@ require("lazy").setup({
       telescope.load_extension("fzf")
     end,
   },
+  {
+    "alexghergh/nvim-tmux-navigation",
+    config = function()
+      require("nvim-tmux-navigation").setup({
+        disable_when_zoomed = true,  -- don't navigate out of a zoomed tmux pane
+        keybindings = {
+          left = "<C-h>",
+          down = "<C-j>",
+          up = "<C-k>",
+          right = "<C-l>",
+          last_active = "<C-\\>",
+          next = "<C-Space>",
+        },
+      })
+    end,
+  },
 })
 
 -- -- Core Behavior --
@@ -134,11 +150,8 @@ local opts = { silent = true }
 -- Clear search highlight with Escape
 map("n", "<Esc>", "<cmd>nohlsearch<CR>", opts)
 
--- Better window navigation
-map("n", "<C-h>", "<C-w>h", opts)
-map("n", "<C-j>", "<C-w>j", opts)
-map("n", "<C-k>", "<C-w>k", opts)
-map("n", "<C-l>", "<C-w>l", opts)
+-- Window navigation (<C-h/j/k/l>) is handled by nvim-tmux-navigation,
+-- which seamlessly crosses into tmux panes at the edges.
 
 -- Resize splits with arrows
 map("n", "<C-Up>",    "<cmd>resize +2<CR>", opts)
@@ -214,4 +227,29 @@ vim.api.nvim_create_autocmd("BufWritePre", {
   group = augroup,
   pattern = "*",
   command = [[%s/\s\+$//e]],
+})
+
+-- Quit Neovim when the nvim-tree file explorer is the only window left
+vim.api.nvim_create_autocmd("QuitPre", {
+  group = augroup,
+  callback = function()
+    local tree_wins = {}
+    local floating_wins = {}
+    local wins = vim.api.nvim_list_wins()
+    for _, w in ipairs(wins) do
+      local bufname = vim.api.nvim_buf_get_name(vim.api.nvim_win_get_buf(w))
+      if bufname:match("NvimTree_") ~= nil then
+        table.insert(tree_wins, w)
+      end
+      if vim.api.nvim_win_get_config(w).relative ~= "" then
+        table.insert(floating_wins, w)
+      end
+    end
+    -- If the tree is the only non-floating window, close it so nvim exits.
+    if 1 == #wins - #floating_wins - #tree_wins then
+      for _, w in ipairs(tree_wins) do
+        vim.api.nvim_win_close(w, true)
+      end
+    end
+  end,
 })
