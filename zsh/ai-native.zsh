@@ -101,9 +101,8 @@ clonerepo() {
 # =====================
 # Aliases — General
 # =====================
-# Safe `ll`/`lst` — don't shadow the system `ls` (would break scripts on other machines).
-alias ll="ls -alFh"
-alias lst="ls -alFht"
+# Don't alias `ls` itself — shadowing the system `ls` can break scripts on other machines.
+alias lst="ls -t"
 alias la="ls -A"
 alias ..="cd .."
 alias ...="cd ../.."
@@ -168,7 +167,7 @@ if [ -d "$HEX_DIR" ]; then
   }
 fi
 
-# boi v2
+# boi
 alias boi="$HOME/.boi/bin/boi"
 alias bd="boi dashboard"
 
@@ -197,8 +196,6 @@ export AGENT_BROWSER_DEFAULT_TIMEOUT=30000
 # Launch Chrome with CDP for agent-browser auto-connect (macOS only)
 [[ "$(uname)" == "Darwin" ]] && \
   alias chrome-debug='/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --remote-debugging-port=9222 &'
-
-alias claude-mem='bun "$HOME/.claude/plugins/marketplaces/thedotmack/plugin/scripts/worker-service.cjs"'
 
 # =====================
 # Completions
