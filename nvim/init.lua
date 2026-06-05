@@ -41,8 +41,17 @@ require("lazy").setup({
         update_focused_file = { enable = true },
       })
       vim.api.nvim_create_autocmd("VimEnter", {
-        callback = function()
+        callback = function(data)
+          -- Open the sidebar, then return the cursor to the file. This
+          -- nvim-tree version's tree.open() always focuses the tree and
+          -- ignores a focus opt, so we jump back to the file window
+          -- explicitly (skip when launched on a directory, e.g. `nvim .`).
           require("nvim-tree.api").tree.open()
+          if data.file ~= "" and vim.fn.isdirectory(data.file) == 0 then
+            vim.schedule(function()
+              vim.cmd("wincmd p")
+            end)
+          end
         end,
       })
     end,
