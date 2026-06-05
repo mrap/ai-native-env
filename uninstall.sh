@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # ai-native-env uninstaller
 # Removes symlinks and restores backups created by install.sh
-set -uo pipefail
+set -euo pipefail
 
 CLONE_DIR="$HOME/.ai-native-env"
 ACTIONS=()
@@ -16,7 +16,7 @@ detect_repo() {
     local script_dir
     script_dir="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" 2>/dev/null && pwd 2>/dev/null)" || true
 
-    if [ -n "${script_dir:-}" ] && [ -f "$script_dir/zsh/zshrc" ]; then
+    if [ -n "${script_dir:-}" ] && [ -f "$script_dir/zsh/ai-native.zsh" ]; then
         REPO_DIR="$script_dir"
     elif [ -d "$CLONE_DIR/.git" ]; then
         REPO_DIR="$CLONE_DIR"
@@ -42,6 +42,29 @@ find_latest_backup() {
         fi
     done
     echo "$latest"
+}
+
+# --- Remove the ai-native.zsh source line from ~/.zshrc (idempotent) ---
+unwire_zshrc() {
+    local target="$HOME/.zshrc"
+    if [ ! -f "$target" ]; then
+        skip "~/.zshrc — not present"
+        return 0
+    fi
+    if ! grep -Fq "ai-native.zsh" "$target"; then
+        skip "~/.zshrc — no ai-native.zsh source line"
+        return 0
+    fi
+    local tmp="${target}.uninstall.$$"
+    # Drop lines mentioning ai-native.zsh AND the comment marker just above it.
+    awk '
+      /ai-native.zsh/ { skip_next=0; next }
+      /^# AI-native base \(managed by ai-native-env\):/ { next }
+      { print }
+    ' "$target" > "$tmp"
+    mv "$tmp" "$target"
+    ACTIONS+=("Removed ai-native.zsh source line from ~/.zshrc")
+    info "Unwired ~/.zshrc"
 }
 
 # --- Remove a symlink if it points to our repo ---
@@ -130,26 +153,30 @@ main() {
 
     echo "  This will remove ai-native-env dotfiles and restore backups."
     echo ""
-    echo "  Files to remove:"
-    echo "    ~/.zshrc (symlink)"
+    echo "  Files to update/remove:"
+    echo "    ~/.zshrc (remove ai-native.zsh source line only)"
     echo "    ~/.config/tmux/tmux.conf (symlink)"
+    echo "    ~/.config/tmux/sesh-picker.sh (symlink)"
     echo "    ~/.config/starship.toml (symlink)"
     echo "    ~/.config/nvim/init.lua (symlink)"
     echo "    ~/.claude/settings.json (copy)"
     echo "    ~/.gitconfig (copy)"
     echo ""
-    read -p "  Continue? [y/N] " -r
-    if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+    read -p "  Continue? [y/N] " -r || true
+    if [[ ! ${REPLY:-} =~ ^[Yy]$ ]]; then
         echo "  Aborted."
         exit 0
     fi
     echo ""
 
+    # Unwire ~/.zshrc (remove only the ai-native.zsh source line)
+    unwire_zshrc
+
     # Remove symlinked dotfiles
-    remove_link "$HOME/.zshrc"                   "~/.zshrc"
-    remove_link "$HOME/.config/tmux/tmux.conf"   "~/.config/tmux/tmux.conf"
-    remove_link "$HOME/.config/starship.toml"    "~/.config/starship.toml"
-    remove_link "$HOME/.config/nvim/init.lua"    "~/.config/nvim/init.lua"
+    remove_link "$HOME/.config/tmux/tmux.conf"      "~/.config/tmux/tmux.conf"
+    remove_link "$HOME/.config/tmux/sesh-picker.sh" "~/.config/tmux/sesh-picker.sh"
+    remove_link "$HOME/.config/starship.toml"       "~/.config/starship.toml"
+    remove_link "$HOME/.config/nvim/init.lua"       "~/.config/nvim/init.lua"
 
     # Remove copied files (pass source for content matching when no backup exists)
     local claude_src="${REPO_DIR:+$REPO_DIR/claude/settings.json}"
@@ -159,8 +186,8 @@ main() {
     # Offer to remove the cloned repo
     if [ -d "$CLONE_DIR/.git" ]; then
         echo ""
-        read -p "  Also remove cloned repo at $CLONE_DIR? [y/N] " -r
-        if [[ $REPLY =~ ^[Yy]$ ]]; then
+        read -p "  Also remove cloned repo at $CLONE_DIR? [y/N] " -r || true
+        if [[ ${REPLY:-} =~ ^[Yy]$ ]]; then
             rm -rf "$CLONE_DIR"
             ACTIONS+=("Removed $CLONE_DIR")
             info "Removed $CLONE_DIR"

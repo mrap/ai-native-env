@@ -3,7 +3,7 @@
 # Usage:
 #   bash <(curl -sL https://raw.githubusercontent.com/mrap/ai-native-env/main/install.sh)
 #   git clone ... && bash install.sh
-set -uo pipefail
+set -euo pipefail
 
 REPO_URL="https://github.com/mrap/ai-native-env.git"
 CLONE_DIR="$HOME/.ai-native-env"
@@ -20,7 +20,7 @@ detect_repo() {
     local script_dir
     script_dir="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" 2>/dev/null && pwd 2>/dev/null)" || true
 
-    if [ -n "${script_dir:-}" ] && [ -f "$script_dir/zsh/zshrc" ]; then
+    if [ -n "${script_dir:-}" ] && [ -f "$script_dir/zsh/ai-native.zsh" ]; then
         REPO_DIR="$script_dir"
     elif [ -d "$CLONE_DIR/.git" ]; then
         REPO_DIR="$CLONE_DIR"
@@ -80,8 +80,8 @@ check_deps() {
         fi
     fi
     echo ""
-    read -p "  Continue anyway? [y/N] " -r
-    if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+    read -p "  Continue anyway? [y/N] " -r || true
+    if [[ ! ${REPLY:-} =~ ^[Yy]$ ]]; then
         echo "Aborted."
         exit 0
     fi
@@ -144,6 +144,50 @@ copy_dotfile() {
     info "Copied $name"
 }
 
+# --- Wire ~/.zshrc to source the AI-native base ---
+wire_zshrc() {
+    local target="$HOME/.zshrc"
+    local base="$REPO_DIR/zsh/ai-native.zsh"
+    local marker="source \"$base\""
+
+    if [ ! -f "$target" ]; then
+        {
+            echo "# ~/.zshrc — personal config can go above or below the source line."
+            echo "# AI-native base (managed by ai-native-env):"
+            echo "$marker"
+        } > "$target"
+        ACTIONS+=("Created ~/.zshrc sourcing ai-native.zsh")
+        info "Created ~/.zshrc"
+        return 0
+    fi
+
+    if grep -Fq "ai-native.zsh" "$target"; then
+        skip "~/.zshrc — already sources ai-native.zsh"
+        return 0
+    fi
+
+    {
+        echo ""
+        echo "# AI-native base (managed by ai-native-env):"
+        echo "$marker"
+    } >> "$target"
+    ACTIONS+=("Appended source line to ~/.zshrc")
+    info "Wired ~/.zshrc → ai-native.zsh"
+}
+
+# --- Seed ~/.secrets (create-only, 600) ---
+setup_secrets() {
+    local target="$HOME/.secrets"
+    if [ -e "$target" ]; then
+        skip "~/.secrets — already exists (not touching)"
+        return 0
+    fi
+    touch "$target"
+    chmod 600 "$target"
+    ACTIONS+=("Created ~/.secrets (chmod 600)")
+    info "Created ~/.secrets"
+}
+
 # --- Git config from template ---
 setup_gitconfig() {
     local template="$REPO_DIR/git/gitconfig.template"
@@ -158,8 +202,8 @@ setup_gitconfig() {
         if [ -n "$existing_name" ] && [ -n "$existing_email" ]; then
             echo ""
             echo "  Git already configured: $existing_name <$existing_email>"
-            read -p "  Overwrite with template? [y/N] " -r
-            if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+            read -p "  Overwrite with template? [y/N] " -r || true
+            if [[ ! ${REPLY:-} =~ ^[Yy]$ ]]; then
                 skip "gitconfig — keeping existing"
                 return 0
             fi
@@ -167,10 +211,10 @@ setup_gitconfig() {
     fi
 
     echo ""
-    read -p "  Full name (for git commits): " -r user_name
-    read -p "  Email (for git commits): " -r user_email
+    read -p "  Full name (for git commits): " -r user_name || true
+    read -p "  Email (for git commits): " -r user_email || true
 
-    if [ -z "$user_name" ] || [ -z "$user_email" ]; then
+    if [ -z "${user_name:-}" ] || [ -z "${user_email:-}" ]; then
         warn "Skipping gitconfig (name and email required)"
         return 0
     fi
@@ -199,14 +243,19 @@ main() {
     echo ""
 
     # Symlink dotfiles
-    link_dotfile "$REPO_DIR/zsh/zshrc"              "$HOME/.zshrc"                   "zshrc"
     link_dotfile "$REPO_DIR/tmux/tmux.conf"         "$HOME/.config/tmux/tmux.conf"   "tmux.conf"
     link_dotfile "$REPO_DIR/tmux/sesh-picker.sh"    "$HOME/.config/tmux/sesh-picker.sh" "sesh-picker.sh"
     link_dotfile "$REPO_DIR/starship/starship.toml"  "$HOME/.config/starship.toml"   "starship.toml"
     link_dotfile "$REPO_DIR/nvim/init.lua"           "$HOME/.config/nvim/init.lua"   "nvim/init.lua"
 
+    # Wire ~/.zshrc to source the AI-native base (does not overwrite user content)
+    wire_zshrc
+
     # Copy files (personalized, not symlinked)
     copy_dotfile "$REPO_DIR/claude/settings.json"    "$HOME/.claude/settings.json"   "claude/settings.json"
+
+    # Seed ~/.secrets (create-only, 600)
+    setup_secrets
 
     # Git config (template substitution)
     setup_gitconfig

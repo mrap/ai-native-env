@@ -17,13 +17,13 @@ git clone https://github.com/mrap/ai-native-env.git ~/.ai-native-env
 cd ~/.ai-native-env && bash install.sh
 ```
 
-The installer symlinks dotfiles, copies Claude settings, configures git (prompts for name/email), and backs up any existing files to `.backup-YYYY-MM-DD`.
+The installer symlinks dotfiles, wires your `~/.zshrc` to `source` the AI-native base (`zsh/ai-native.zsh`) without overwriting your file, copies Claude settings, seeds `~/.secrets` (chmod 600) if absent, configures git (prompts for name/email), and backs up any existing files to `.backup-YYYY-MM-DD`.
 
 ## What's Included
 
 | Component | Target | Description |
 |-----------|--------|-------------|
-| **zsh** | `~/.zshrc` | Vi-mode shell with git/docker aliases, fzf integration (Catppuccin colors), zoxide smart cd, bun, starship prompt |
+| **zsh** | `zsh/ai-native.zsh` (sourced from `~/.zshrc`) | Vi-mode shell with git/docker aliases, fzf integration (Catppuccin colors), zoxide smart cd, bun, starship prompt. Your own `~/.zshrc` sources this base; personal config lives around the source line. |
 | **tmux** | `~/.config/tmux/tmux.conf` | Ctrl+Space prefix, vi copy mode, TPM plugins, sesh session picker, Claude Code status bar |
 | **starship** | `~/.config/starship.toml` | Minimal prompt with git status, node version, command duration |
 | **neovim** | `~/.config/nvim/init.lua` | Space leader, 2-space indent, relative numbers, persistent undo |
@@ -58,7 +58,7 @@ Removes symlinks and restores backed-up originals. Optionally removes the cloned
 
 ## Customize
 
-Dotfiles are symlinked, so edit the source files directly and changes take effect immediately. Files that are copied (gitconfig, claude settings) need to be re-copied or re-run through the installer.
+Dotfiles are symlinked, so edit the source files directly and changes take effect immediately. The zsh base (`zsh/ai-native.zsh`) is sourced from your `~/.zshrc`, so edits to it take effect on next shell start — add your personal aliases/exports to `~/.zshrc` around the `source …/ai-native.zsh` line. Files that are copied (gitconfig, claude settings) need to be re-copied or re-run through the installer.
 
 ## Setting Up Someone Else
 

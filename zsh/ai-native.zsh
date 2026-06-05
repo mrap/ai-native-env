@@ -1,3 +1,7 @@
+# ai-native-env — base zsh module
+# Sourced from a user's ~/.zshrc. Portable across machines and users.
+# Personal config belongs in ~/.zshrc, around the source line.
+
 # =====================
 # Environment
 # =====================
@@ -6,6 +10,7 @@ export LANG=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
 export EDITOR=vim
 export XDG_CONFIG_HOME=~/.config
+export PATH="/usr/local/bin:$PATH"
 
 bindkey -v
 # Shorter delay switching between insert/normal mode (default is 0.4s)
@@ -19,8 +24,6 @@ function zle-keymap-select {
   fi
 }
 zle -N zle-keymap-select
-
-
 
 # =====================
 # History
@@ -44,7 +47,7 @@ export NVM_DIR="$HOME/.nvm"
 # =====================
 # Starship prompt
 # =====================
-eval "$(starship init zsh)"
+command -v starship &>/dev/null && eval "$(starship init zsh)"
 
 # =====================
 # fzf keybindings + history search
@@ -70,36 +73,36 @@ fi
 # Aliases — Git
 # =====================
 alias g="git"
-alias gcm="git commit -m"
-alias gpl="git pull"
 alias gs="git status"
 alias ga="git add -A"
 alias gc="git commit -m"
+alias gcm="git commit -m"
 alias gp="git push"
+alias gpl="git pull"
 alias gl="git log --graph --decorate --all --max-count=30 --format='%C(auto)%h%d %s %C(dim)(%cr)%C(reset)'"
 alias gd="git diff"
 alias gco="git checkout"
 alias gb="git branch"
 
-clonerepo () {
-  if [ "$#" -ne 1 ]; then
+clonerepo() {
+  local url="$1"
+  if [ -z "$url" ]; then
     echo "Pass a GitHub URL to clone."
     return 0
   fi
-  local url=$1
-  local owner_repo=$(echo $url | sed -E 's|https?://github\.com/||; s|\.git$||')
-  local ssh_url="git@github.com:${owner_repo}.git"
-  local repo_dir="$HOME/github.com/${owner_repo}"
-  git clone "$ssh_url" "$repo_dir" && cd "$repo_dir"
+  local owner repo dest
+  owner=$(echo "$url" | sed -E "s|.*github\.com[:/]([^/]+)/.*|\1|")
+  repo=$(echo "$url"  | sed -E "s|.*github\.com[:/][^/]+/([^/.]+).*|\1|")
+  dest="$HOME/github.com/$owner/$repo"
+  mkdir -p "$(dirname "$dest")"
+  git clone "$url" "$dest" && cd "$dest"
 }
-
 
 # =====================
 # Aliases — General
 # =====================
+# Safe `ll`/`lst` — don't shadow the system `ls` (would break scripts on other machines).
 alias ll="ls -alFh"
-# lst: long list sorted by modification time. Aliasing `ls` itself on portable machines
-# shadows the system ls and can break scripts; ll is the safe alternative.
 alias lst="ls -alFht"
 alias la="ls -A"
 alias ..="cd .."
@@ -110,10 +113,8 @@ alias du="du -h"
 alias ports="ss -tulanp"
 alias vz='vim ~/.zshrc'
 alias sz='source ~/.zshrc'
-function mkcd(){
-  mkdir -p $1 && cd $1
-}
 
+mkcd() { mkdir -p "$1" && cd "$1"; }
 
 # =====================
 # Aliases — Docker
@@ -138,51 +139,53 @@ export PATH="$HOME/.local/bin:$HOME/.npm-global/bin:$PATH"
 alias vim="nvim"
 alias vi="nvim"
 
-alias claude='claude  --dangerously-skip-permissions'
-stty -ixon -ixoff
+alias claude='claude --dangerously-skip-permissions'
+stty -ixon -ixoff 2>/dev/null
 
 # =====================
-# Homebrew
+# Homebrew (macOS, Apple Silicon)
 # =====================
-eval "$(/opt/homebrew/bin/brew shellenv)"
+[ -x /opt/homebrew/bin/brew ] && eval "$(/opt/homebrew/bin/brew shellenv)"
 
 # =====================
 # Hex Agent
 # =====================
-export HEX_DIR="$HOME/mrap-hex"
+export HEX_DIR="${HEX_DIR:-$HOME/hex}"
 export AGENT_DIR="$HEX_DIR"
 if [ -d "$HEX_DIR" ]; then
   export PATH="$HEX_DIR/.hex/bin:$PATH"
-  alias hex-new='cd $HEX_DIR && claude /hex-startup'
+
+  hex-new() {
+    # hex-new [session-name] — start a hex session; optional name labels it in
+    # happy, the Claude Code session, and Claude Code remote control.
+    cd "$HEX_DIR" || return
+    if [[ -n "$1" ]]; then
+      happy --yolo --dangerously-skip-permissions \
+        --name "$1" --remote-control "$1" "/hex-startup"
+    else
+      happy --yolo --dangerously-skip-permissions /hex-startup
+    fi
+  }
 fi
-alias boi="bash $HOME/github.com/mrap/boi/boi.sh"
+
+# boi v2
+alias boi="$HOME/.boi/bin/boi"
+alias bd="boi dashboard"
 
 # =====================
-# Git helpers
+# Google Cloud SDK
 # =====================
-clonerepo() {
-  local url="$1"
-  local owner repo dest
-  owner=$(echo "$url" | sed -E "s|.*github\.com[:/]([^/]+)/.*|\1|")
-  repo=$(echo "$url" | sed -E "s|.*github\.com[:/][^/]+/([^/.]+).*|\1|")
-  dest="$HOME/github.com/$owner/$repo"
-  mkdir -p "$dest"
-  git clone "$url" "$dest"
-  cd "$dest"
-}
-
-mkcd() { mkdir -p "$1" && cd "$1"; }
+[ -d /opt/homebrew/share/google-cloud-sdk/bin ] && \
+  export PATH="/opt/homebrew/share/google-cloud-sdk/bin:$PATH"
 
 # =====================
-# Claude Code
-# =====================
-
-export PATH=/opt/homebrew/share/google-cloud-sdk/bin:"$PATH"
-
 # zoxide (smart cd)
+# =====================
 command -v zoxide &>/dev/null && eval "$(zoxide init zsh)"
 
+# =====================
 # bun
+# =====================
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
 [ -s "$BUN_INSTALL/_bun" ] && source "$BUN_INSTALL/_bun"
@@ -192,10 +195,34 @@ export PATH="$BUN_INSTALL/bin:$PATH"
 # =====================
 export AGENT_BROWSER_DEFAULT_TIMEOUT=30000
 # Launch Chrome with CDP for agent-browser auto-connect (macOS only)
-[[ "$(uname)" == "Darwin" ]] && alias chrome-debug='/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --remote-debugging-port=9222 &'
+[[ "$(uname)" == "Darwin" ]] && \
+  alias chrome-debug='/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --remote-debugging-port=9222 &'
 
 alias claude-mem='bun "$HOME/.claude/plugins/marketplaces/thedotmack/plugin/scripts/worker-service.cjs"'
 
+# =====================
+# Completions
+# =====================
 [ -f "$HOME/.local/bin/env" ] && . "$HOME/.local/bin/env"
 fpath=("$HOME/.zfunc" $fpath)
 autoload -U compinit && compinit
+
+# hex shell completions
+command -v hex >/dev/null 2>&1 && source <(hex completions zsh)
+
+# ── Happy daemon (auto-start on first interactive shell after reboot) ─────────
+# https://github.com/slopus/happy/tree/main/packages/happy-cli#keeping-the-daemon-running-across-reboots
+# Avoids LaunchAgent — daemon needs GUI/Aqua session for keychain access.
+if [[ -o interactive ]] && [[ -z "$HAPPY_DAEMON_CHECKED" ]] && command -v happy &>/dev/null; then
+    export HAPPY_DAEMON_CHECKED=1
+    () {
+        local state=$HOME/.happy/daemon.state.json
+        local pid=$(grep -oE '"pid"[[:space:]]*:[[:space:]]*[0-9]+' "$state" 2>/dev/null | grep -oE '[0-9]+')
+        if [[ -z "$pid" ]] || ! kill -0 "$pid" 2>/dev/null; then
+            happy daemon start >/dev/null 2>&1
+        fi
+    } &!
+fi
+
+# Disable impeccable skill version phone-home
+export IMPECCABLE_NO_UPDATE_CHECK=1

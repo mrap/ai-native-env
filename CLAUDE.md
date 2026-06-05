@@ -17,8 +17,10 @@ This is NOT a traditional software project. There is no build system, no tests, 
 | `skills/ai-native-coach/SKILL.md` | Ongoing coaching skill for AI-native progression |
 | `claude/METHODOLOGY.md` | How the Claude Code environment is configured and used |
 | `claude/settings.json` | Claude Code settings (plan mode default, plugins, marketplaces) |
-| `scripts/install.sh` | Standalone installer (interactive, gathers name/email/GitHub user) |
-| `zsh/`, `nvim/`, `tmux/`, `starship/`, `git/` | Dotfile configs to be symlinked/copied |
+| `install.sh` | Canonical installer (symlinks configs, wires `~/.zshrc` to source the base, seeds `~/.secrets`, configures git) |
+| `uninstall.sh` | Reverses the installer; removes the source line from `~/.zshrc` without deleting the file |
+| `zsh/ai-native.zsh` | AI-native base — sourced from a user's own `~/.zshrc` (personal config lives around the source line) |
+| `nvim/`, `tmux/`, `starship/`, `git/` | Dotfile configs to be symlinked/copied |
 
 ## Key Conventions
 
