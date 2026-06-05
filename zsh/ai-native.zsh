@@ -116,16 +116,6 @@ alias sz='source ~/.zshrc'
 mkcd() { mkdir -p "$1" && cd "$1"; }
 
 # =====================
-# Aliases — Docker
-# =====================
-alias dps="docker ps"
-alias dpsa="docker ps -a"
-alias dcu="docker compose up -d"
-alias dcd="docker compose down"
-alias dcl="docker compose logs -f"
-alias dcp="docker compose pull"
-
-# =====================
 # PATH
 # =====================
 export PATH="$HOME/.local/bin:$HOME/.npm-global/bin:$PATH"
@@ -157,14 +147,6 @@ command -v zoxide &>/dev/null && eval "$(zoxide init zsh)"
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
 [ -s "$BUN_INSTALL/_bun" ] && source "$BUN_INSTALL/_bun"
-
-# =====================
-# agent-browser (Vercel)
-# =====================
-export AGENT_BROWSER_DEFAULT_TIMEOUT=30000
-# Launch Chrome with CDP for agent-browser auto-connect (macOS only)
-[[ "$(uname)" == "Darwin" ]] && \
-  alias chrome-debug='/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --remote-debugging-port=9222 &'
 
 # =====================
 # Completions
