@@ -147,12 +147,6 @@ stty -ixon -ixoff 2>/dev/null
 [ -x /opt/homebrew/bin/brew ] && eval "$(/opt/homebrew/bin/brew shellenv)"
 
 # =====================
-# Google Cloud SDK
-# =====================
-[ -d /opt/homebrew/share/google-cloud-sdk/bin ] && \
-  export PATH="/opt/homebrew/share/google-cloud-sdk/bin:$PATH"
-
-# =====================
 # zoxide (smart cd)
 # =====================
 command -v zoxide &>/dev/null && eval "$(zoxide init zsh)"
@@ -178,20 +172,3 @@ export AGENT_BROWSER_DEFAULT_TIMEOUT=30000
 [ -f "$HOME/.local/bin/env" ] && . "$HOME/.local/bin/env"
 fpath=("$HOME/.zfunc" $fpath)
 autoload -U compinit && compinit
-
-# ── Happy daemon (auto-start on first interactive shell after reboot) ─────────
-# https://github.com/slopus/happy/tree/main/packages/happy-cli#keeping-the-daemon-running-across-reboots
-# Avoids LaunchAgent — daemon needs GUI/Aqua session for keychain access.
-if [[ -o interactive ]] && [[ -z "$HAPPY_DAEMON_CHECKED" ]] && command -v happy &>/dev/null; then
-    export HAPPY_DAEMON_CHECKED=1
-    () {
-        local state=$HOME/.happy/daemon.state.json
-        local pid=$(grep -oE '"pid"[[:space:]]*:[[:space:]]*[0-9]+' "$state" 2>/dev/null | grep -oE '[0-9]+')
-        if [[ -z "$pid" ]] || ! kill -0 "$pid" 2>/dev/null; then
-            happy daemon start >/dev/null 2>&1
-        fi
-    } &!
-fi
-
-# Disable impeccable skill version phone-home
-export IMPECCABLE_NO_UPDATE_CHECK=1
