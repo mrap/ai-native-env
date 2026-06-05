@@ -36,7 +36,10 @@ require("lazy").setup({
     config = function()
       vim.g.loaded_netrw = 1
       vim.g.loaded_netrwPlugin = 1
-      require("nvim-tree").setup()
+      require("nvim-tree").setup({
+        -- Keep the sidebar tracking + highlighting the current buffer's file.
+        update_focused_file = { enable = true },
+      })
       vim.api.nvim_create_autocmd("VimEnter", {
         callback = function()
           require("nvim-tree.api").tree.open()
@@ -174,6 +177,8 @@ map("x", "p", [["_dP]], opts)
 
 -- File tree
 map("n", "<leader>n", "<cmd>NvimTreeToggle<CR>", opts)
+-- Reveal & highlight the current file in the sidebar
+map("n", "<leader>N", "<cmd>NvimTreeFindFile<CR>", opts)
 
 -- Fuzzy finder
 map("n", "<leader>t", "<cmd>Telescope find_files<CR>", opts)
