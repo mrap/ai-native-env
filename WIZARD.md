@@ -71,7 +71,7 @@ Ask the user which configs they want (default: all):
 
 | Config | Source | Destination | What it does |
 |--------|--------|-------------|--------------|
-| ZSh | `zsh/zshrc` | `~/.zshrc` | Shell configuration, aliases, vim mode |
+| ZSh | `zsh/ai-native.zsh` | `~/.zshrc` (sources the base) | AI-native shell base; your personal config goes in `~/.zshrc` around the source line |
 | Starship | `starship/starship.toml` | `~/.config/starship.toml` | Terminal prompt theme |
 | Neovim | `nvim/init.lua` | `~/.config/nvim/init.lua` | Text editor settings |
 | Tmux | `tmux/tmux.conf` | `~/.config/tmux/tmux.conf` | Terminal multiplexer |

@@ -28,7 +28,7 @@ This is NOT a traditional software project. There is no build system, no tests, 
 - **Role-adaptive** — Wizards and coaching adapt to the user's role (engineer, PM, designer, analyst, writer). Never assume the user writes code.
 - **Progressive disclosure** — Wizards are tiered (Bronze → Silver → Gold). Users can stop at any tier and have something useful.
 - **Git workflow** — Repos live under `~/github.com/<owner>/<repo>`. The `clonerepo` shell function handles this.
-- **Config deployment** — Configs are copied (not symlinked) by the installer. Existing files get timestamped backups.
+- **Config deployment** — nvim/tmux/starship are symlinked; the zsh base (`zsh/ai-native.zsh`) is sourced from your `~/.zshrc`; gitconfig and Claude settings are copied. Existing files get timestamped backups.
 - **Template substitution** — `git/gitconfig.template` uses `__USER_NAME__` and `__USER_EMAIL__` placeholders.
 
 ## Working in This Repo

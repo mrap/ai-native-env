@@ -104,7 +104,7 @@ The concepts are universal; only the examples change.
 
 ## Project Memory
 
-Claude Code maintains per-project memory at:
+With the optional `claude-mem` plugin installed (not enabled by the shipped settings), Claude Code maintains per-project memory at:
 `~/.claude/projects/<encoded-path>/memory/MEMORY.md`
 
 This captures:
