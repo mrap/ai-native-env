@@ -3,6 +3,11 @@
 # Removes symlinks and restores backups created by install.sh
 set -euo pipefail
 
+# Capture our own path at TOP LEVEL. Inside a function zsh sets $0 to the
+# function name (FUNCTION_ARGZERO), and bash's BASH_SOURCE is unset under zsh —
+# so this must be read here, before any function runs, to survive `zsh uninstall.sh`.
+if [ -n "${ZSH_VERSION:-}" ]; then SELF_SRC="$0"; else SELF_SRC="${BASH_SOURCE[0]:-$0}"; fi
+
 CLONE_DIR="$HOME/.ai-native-env"
 ACTIONS=()
 
@@ -14,7 +19,7 @@ skip()  { printf '  \033[0;90m- %s (skipped)\033[0m\n' "$*"; }
 # --- Determine repo directory ---
 detect_repo() {
     local script_dir
-    script_dir="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" 2>/dev/null && pwd 2>/dev/null)" || true
+    script_dir="$(cd "$(dirname "$SELF_SRC")" 2>/dev/null && pwd 2>/dev/null)" || true
 
     if [ -n "${script_dir:-}" ] && [ -f "$script_dir/zsh/ai-native.zsh" ]; then
         REPO_DIR="$script_dir"
