@@ -61,12 +61,9 @@ if command -v fzf &>/dev/null; then
   [ -f "$_fzf_prefix/key-bindings.zsh" ] && source "$_fzf_prefix/key-bindings.zsh"
   [ -f "$_fzf_prefix/completion.zsh" ] && source "$_fzf_prefix/completion.zsh"
   unset _fzf_prefix
-  export FZF_DEFAULT_OPTS="--height 40% --layout=reverse --border \
-    --color=bg+:#CCD0DA,bg:#EFF1F5,spinner:#DC8A78,hl:#D20F39 \
-    --color=fg:#4C4F69,header:#D20F39,info:#8839EF,pointer:#DC8A78 \
-    --color=marker:#7287FD,fg+:#4C4F69,prompt:#8839EF,hl+:#D20F39 \
-    --color=selected-bg:#BCC0CC \
-    --color=border:#9CA0B0,label:#4C4F69"
+  # Functional defaults only — no hardcoded palette (inherits your terminal theme).
+  # Set a personal --color scheme in your own ~/.zshrc if you want one.
+  export FZF_DEFAULT_OPTS="--height 40% --layout=reverse --border"
 fi
 
 # =====================
@@ -109,7 +106,7 @@ alias ...="cd ../.."
 alias grep="grep --color=auto"
 alias df="df -h"
 alias du="du -h"
-alias ports="ss -tulanp"
+alias ports="lsof -nP -iTCP -sTCP:LISTEN"  # portable (macOS + Linux); ss is Linux-only
 alias vz='vim ~/.zshrc'
 alias sz='source ~/.zshrc'
 
