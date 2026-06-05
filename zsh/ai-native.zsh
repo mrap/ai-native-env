@@ -147,31 +147,6 @@ stty -ixon -ixoff 2>/dev/null
 [ -x /opt/homebrew/bin/brew ] && eval "$(/opt/homebrew/bin/brew shellenv)"
 
 # =====================
-# Hex Agent
-# =====================
-export HEX_DIR="${HEX_DIR:-$HOME/hex}"
-export AGENT_DIR="$HEX_DIR"
-if [ -d "$HEX_DIR" ]; then
-  export PATH="$HEX_DIR/.hex/bin:$PATH"
-
-  hex-new() {
-    # hex-new [session-name] — start a hex session; optional name labels it in
-    # happy, the Claude Code session, and Claude Code remote control.
-    cd "$HEX_DIR" || return
-    if [[ -n "$1" ]]; then
-      happy --yolo --dangerously-skip-permissions \
-        --name "$1" --remote-control "$1" "/hex-startup"
-    else
-      happy --yolo --dangerously-skip-permissions /hex-startup
-    fi
-  }
-fi
-
-# boi
-alias boi="$HOME/.boi/bin/boi"
-alias bd="boi dashboard"
-
-# =====================
 # Google Cloud SDK
 # =====================
 [ -d /opt/homebrew/share/google-cloud-sdk/bin ] && \
@@ -203,9 +178,6 @@ export AGENT_BROWSER_DEFAULT_TIMEOUT=30000
 [ -f "$HOME/.local/bin/env" ] && . "$HOME/.local/bin/env"
 fpath=("$HOME/.zfunc" $fpath)
 autoload -U compinit && compinit
-
-# hex shell completions
-command -v hex >/dev/null 2>&1 && source <(hex completions zsh)
 
 # ── Happy daemon (auto-start on first interactive shell after reboot) ─────────
 # https://github.com/slopus/happy/tree/main/packages/happy-cli#keeping-the-daemon-running-across-reboots
