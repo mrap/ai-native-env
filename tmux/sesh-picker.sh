@@ -1,13 +1,14 @@
 #!/usr/bin/env bash
 # sesh session picker with fzf
 # Enter = connect to selected session via sesh
-# ctrl-n = create new bare tmux session from typed query
+# ctrl-e = create new bare tmux session from typed query
 choice=$(sesh list --icons | fzf-tmux -p 55%,60% \
   --no-sort --ansi \
   --border-label ' sesh ' --prompt '⚡  ' \
-  --header '  ^a all  ^t tmux  ^g config  ^x zoxide  ^d tmux kill  ^f find  ^n new' \
+  --header '  ^a all  ^t tmux  ^g config  ^x zoxide  ^d tmux kill  ^f find  ^e new' \
   --bind 'tab:down,btab:up' \
-  --bind "ctrl-n:become(echo NEW:{q})" \
+  --bind 'ctrl-n:down,ctrl-p:up' \
+  --bind "ctrl-e:become(echo NEW:{q})" \
   --bind 'ctrl-a:change-prompt(⚡  )+reload(sesh list --icons)' \
   --bind 'ctrl-t:change-prompt(🪟  )+reload(sesh list -t --icons)' \
   --bind 'ctrl-g:change-prompt(⚙️  )+reload(sesh list -c --icons)' \
@@ -17,7 +18,9 @@ choice=$(sesh list --icons | fzf-tmux -p 55%,60% \
 
 if [[ "$choice" == NEW:* ]]; then
   name="${choice#NEW:}"
-  [[ -n "$name" ]] && tmux new-session -d -s "$name" && tmux switch-client -t "$name"
+  if [[ -n "$name" ]]; then
+    tmux new-session -d -s "$name" && tmux switch-client -t "$name"
+  fi
 elif [[ -n "$choice" ]]; then
   sesh connect "$choice"
 fi
