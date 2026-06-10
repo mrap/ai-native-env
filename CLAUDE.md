@@ -48,7 +48,6 @@ When editing dotfiles:
 ## Claude Code Settings Context
 
 The `claude/settings.json` shipped by this repo:
-- Default mode is `plan` — Claude requires approval before making changes
-- `skipDangerousModePermissionPrompt: true` — pairs with the `--dangerously-skip-permissions` zsh alias for power users
-- Three plugins enabled: superpowers (structured workflows), code-review
-- Six plugin marketplaces registered (see `claude/METHODOLOGY.md` for details)
+- Default mode is `bypassPermissions` — paired with `skipDangerousModePermissionPrompt: true`, Claude auto-enters bypass mode with no confirmation prompt
+- Two plugins enabled: superpowers (structured workflows), pyright-lsp
+- One plugin marketplace registered: claude-plugins-official (see `claude/METHODOLOGY.md` for details)

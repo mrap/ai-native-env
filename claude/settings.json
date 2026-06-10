@@ -10,35 +10,13 @@
   },
   "enabledPlugins": {
     "superpowers@superpowers-marketplace": true,
-    "pyright-lsp@claude-plugins-official": true,
-    "firebase@firebase": true,
-    "ui-ux-pro-max@ui-ux-pro-max-skill": true,
-    "vercel@claude-plugins-official": true
+    "pyright-lsp@claude-plugins-official": true
   },
   "extraKnownMarketplaces": {
-    "firebase": {
-      "source": {
-        "source": "github",
-        "repo": "firebase/agent-skills"
-      },
-      "autoUpdate": true
-    },
-    "ui-ux-pro-max-skill": {
-      "source": {
-        "source": "github",
-        "repo": "nextlevelbuilder/ui-ux-pro-max-skill"
-      }
-    },
     "claude-plugins-official": {
       "source": {
         "source": "github",
         "repo": "anthropics/claude-plugins-official"
-      }
-    },
-    "rust-skills": {
-      "source": {
-        "source": "github",
-        "repo": "actionbook/rust-skills"
       }
     }
   },

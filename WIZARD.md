@@ -112,11 +112,6 @@ Explain each plugin to the user:
   It's like having a senior engineer's discipline built in."
 - **pyright-lsp** — "Type-aware Python editing. Claude uses Pyright to catch
   type errors as it writes Python code."
-- **firebase** — "Firebase developer skills for Firestore, Auth, Hosting,
-  and more."
-- **ui-ux-pro-max** — "UI/UX design intelligence: styles, color palettes, font
-  pairings, component patterns."
-- **vercel** — "Deployment and infrastructure skills for Vercel projects."
 
 Ask: "Do you want all the plugin marketplaces registered? They give Claude access
 to community-made skills." (Default: yes)

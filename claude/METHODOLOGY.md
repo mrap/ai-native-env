@@ -20,7 +20,7 @@ before completion).
 
 ## Plugin System
 
-Five plugins are enabled:
+Two plugins are enabled:
 
 1. **`superpowers@superpowers-marketplace`** (obra/superpowers-marketplace)
    - The core skill system. Provides structured workflows:
@@ -40,25 +40,13 @@ Five plugins are enabled:
 2. **`pyright-lsp@claude-plugins-official`** (anthropics/claude-plugins-official)
    - Pyright LSP integration for type-aware Python editing
 
-3. **`firebase@firebase`** (firebase/agent-skills)
-   - Firebase developer skills for Firestore, Auth, Hosting, etc.
-
-4. **`ui-ux-pro-max@ui-ux-pro-max-skill`** (nextlevelbuilder/ui-ux-pro-max-skill)
-   - UI/UX design intelligence: styles, palettes, font pairings, component patterns
-
-5. **`vercel@claude-plugins-official`** (anthropics/claude-plugins-official)
-   - Vercel deployment and infrastructure skills
-
 ## Marketplace Registry
 
-Four marketplaces are registered (not all plugins from each are enabled):
+One marketplace is registered (not all plugins from it are enabled):
 
 | Marketplace | Repo | Purpose |
 |-------------|------|---------|
-| firebase | firebase/agent-skills | Firebase developer skills (auto-updated) |
-| ui-ux-pro-max-skill | nextlevelbuilder/ui-ux-pro-max-skill | UI/UX design skills |
 | claude-plugins-official | anthropics/claude-plugins-official | Official Anthropic plugins |
-| rust-skills | actionbook/rust-skills | Rust development skills |
 
 ## CLAUDE.md Methodology
 
