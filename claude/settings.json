@@ -19,7 +19,7 @@
     }
   },
   "alwaysThinkingEnabled": true,
-  "advisorModel": "opus",
+  "advisorModel": "fable",
   "tui": "fullscreen",
   "autoScrollEnabled": true,
   "autoUpdatesChannel": "latest",
