@@ -19,6 +19,7 @@
     }
   },
   "alwaysThinkingEnabled": true,
+  "showThinkingSummaries": true,
   "advisorModel": "opus",
   "tui": "fullscreen",
   "autoScrollEnabled": true,
