@@ -1,0 +1,27 @@
+{
+  "disableAllHooks": true,
+  "autoMemoryEnabled": false,
+  "disableBundledSkills": true,
+  "disableWorkflows": true,
+  "disableAgentView": true,
+  "disableRemoteControl": true,
+  "disableSkillShellExecution": true,
+  "disableDeepLinkRegistration": "disable",
+  "includeCoAuthoredBy": false,
+  "includeGitInstructions": false,
+  "spinnerTipsEnabled": false,
+  "awaySummaryEnabled": false,
+  "showTurnDuration": false,
+  "showThinkingSummaries": false,
+  "alwaysThinkingEnabled": false,
+  "enableAllProjectMcpServers": false,
+  "enabledPlugins": {},
+  "env": {
+    "DISABLE_AUTOUPDATER": "1",
+    "DISABLE_TELEMETRY": "1",
+    "DISABLE_ERROR_REPORTING": "1",
+    "DISABLE_NON_ESSENTIAL_MODEL_CALLS": "1",
+    "CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC": "1",
+    "CLAUDE_CODE_DISABLE_FEEDBACK_SURVEY": "1"
+  }
+}
