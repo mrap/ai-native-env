@@ -22,7 +22,7 @@
   "advisorModel": "opus",
   "tui": "fullscreen",
   "autoScrollEnabled": true,
-  "autoUpdatesChannel": "stable",
+  "autoUpdatesChannel": "latest",
   "skipDangerousModePermissionPrompt": true,
   "theme": "light",
   "editorMode": "vim",
