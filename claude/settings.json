@@ -40,6 +40,7 @@
   },
   "effortLevel": "medium",
   "alwaysThinkingEnabled": true,
+  "advisorModel": "opus",
   "autoUpdatesChannel": "latest",
   "skipDangerousModePermissionPrompt": true,
   "theme": "light",
