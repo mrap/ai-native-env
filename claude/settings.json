@@ -3,7 +3,6 @@
   "permissions": {
     "defaultMode": "plan"
   },
-  "model": "claude-opus-4-7",
   "hooks": {},
   "enabledPlugins": {
     "superpowers@superpowers-marketplace": true,
@@ -41,7 +40,6 @@
   },
   "effortLevel": "medium",
   "autoUpdatesChannel": "latest",
-  "skipDangerousModePermissionPrompt": true,
   "theme": "light",
   "editorMode": "vim",
   "remoteControlAtStartup": true,
