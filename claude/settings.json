@@ -1,7 +1,7 @@
 {
   "cleanupPeriodDays": 99999,
   "permissions": {
-    "defaultMode": "plan"
+    "defaultMode": "bypassPermissions"
   },
   "hooks": {},
   "enabledPlugins": {
@@ -40,6 +40,7 @@
   },
   "effortLevel": "medium",
   "autoUpdatesChannel": "latest",
+  "skipDangerousModePermissionPrompt": true,
   "theme": "light",
   "editorMode": "vim",
   "remoteControlAtStartup": true,
