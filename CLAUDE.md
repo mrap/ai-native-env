@@ -49,5 +49,5 @@ When editing dotfiles:
 
 The `claude/settings.json` shipped by this repo:
 - Default mode is `bypassPermissions` — paired with `skipDangerousModePermissionPrompt: true`, Claude auto-enters bypass mode with no confirmation prompt
-- Two plugins enabled: superpowers (structured workflows), pyright-lsp
+- One plugin enabled: superpowers (structured workflows)
 - One plugin marketplace registered: claude-plugins-official (see `claude/METHODOLOGY.md` for details)

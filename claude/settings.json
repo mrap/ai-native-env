@@ -9,8 +9,7 @@
     "CLAUDE_CODE_DISABLE_FEEDBACK_SURVEY": "1"
   },
   "enabledPlugins": {
-    "superpowers@superpowers-marketplace": true,
-    "pyright-lsp@claude-plugins-official": true
+    "superpowers@superpowers-marketplace": true
   },
   "extraKnownMarketplaces": {
     "claude-plugins-official": {

@@ -110,8 +110,6 @@ Explain each plugin to the user:
 - **superpowers** — "This gives Claude structured workflows. Instead of just
   diving in, Claude will brainstorm first, make a plan, then execute step by step.
   It's like having a senior engineer's discipline built in."
-- **pyright-lsp** — "Type-aware Python editing. Claude uses Pyright to catch
-  type errors as it writes Python code."
 
 Ask: "Do you want all the plugin marketplaces registered? They give Claude access
 to community-made skills." (Default: yes)

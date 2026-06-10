@@ -28,7 +28,7 @@ The installer symlinks dotfiles, wires your `~/.zshrc` to `source` the AI-native
 | **starship** | `~/.config/starship.toml` | Minimal prompt with git status, node version, command duration |
 | **neovim** | `~/.config/nvim/init.lua` | Space leader, 2-space indent, relative numbers, persistent undo |
 | **git** | `~/.gitconfig` | Sane defaults, custom `changes` and `lg` aliases (copied from template) |
-| **claude** | `~/.claude/settings.json` | Bypass-permissions mode, 2 plugins (superpowers, pyright), 1 marketplace |
+| **claude** | `~/.claude/settings.json` | Bypass-permissions mode, 1 plugin (superpowers), 1 marketplace registered |
 
 ## Prerequisites
 

@@ -20,7 +20,7 @@ before completion).
 
 ## Plugin System
 
-Two plugins are enabled:
+One plugin is enabled:
 
 1. **`superpowers@superpowers-marketplace`** (obra/superpowers-marketplace)
    - The core skill system. Provides structured workflows:
@@ -37,12 +37,9 @@ Two plugins are enabled:
      - `using-git-worktrees` — Isolated feature work
      - `writing-skills` — Creating new skills
 
-2. **`pyright-lsp@claude-plugins-official`** (anthropics/claude-plugins-official)
-   - Pyright LSP integration for type-aware Python editing
-
 ## Marketplace Registry
 
-One marketplace is registered (not all plugins from it are enabled):
+One marketplace is registered (no plugins from it are enabled by default):
 
 | Marketplace | Repo | Purpose |
 |-------------|------|---------|
