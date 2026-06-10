@@ -39,6 +39,7 @@
     }
   },
   "effortLevel": "medium",
+  "alwaysThinkingEnabled": true,
   "autoUpdatesChannel": "latest",
   "skipDangerousModePermissionPrompt": true,
   "theme": "light",
