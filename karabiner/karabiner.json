@@ -18,7 +18,7 @@
             "complex_modifications": {
                 "rules": [
                     {
-                        "description": "Right Command: tap \u2192 F18 (Leader Key), hold \u2192 Right Command",
+                        "description": "Right Command: tap \u2192 F18 (Leader Key), hold \u2192 Right Control",
                         "manipulators": [
                             {
                                 "type": "basic",
@@ -32,7 +32,34 @@
                                 },
                                 "to": [
                                     {
-                                        "key_code": "right_command",
+                                        "key_code": "right_control",
+                                        "lazy": true
+                                    }
+                                ],
+                                "to_if_alone": [
+                                    {
+                                        "key_code": "f18"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "description": "Left Command: tap \u2192 F18 (Leader Key), hold \u2192 Left Command",
+                        "manipulators": [
+                            {
+                                "type": "basic",
+                                "from": {
+                                    "key_code": "left_command",
+                                    "modifiers": {
+                                        "optional": [
+                                            "any"
+                                        ]
+                                    }
+                                },
+                                "to": [
+                                    {
+                                        "key_code": "left_command",
                                         "lazy": true
                                     }
                                 ],
