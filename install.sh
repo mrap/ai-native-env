@@ -288,6 +288,12 @@ main() {
     link_dotfile "$REPO_DIR/starship/starship.toml"  "$HOME/.config/starship.toml"   "starship.toml"
     link_dotfile "$REPO_DIR/nvim/init.lua"           "$HOME/.config/nvim/init.lua"   "nvim/init.lua"
 
+    # macOS-only: Karabiner (caps→esc, left⌘ tap→F18/hold→ctrl) + Leader Key (F18 leader)
+    if [ "$PLATFORM" = "macos" ]; then
+        link_dotfile "$REPO_DIR/karabiner/karabiner.json" "$HOME/.config/karabiner/karabiner.json" "karabiner.json"
+        link_dotfile "$REPO_DIR/leader-key/config.json"   "$HOME/Library/Application Support/Leader Key/config.json" "leader-key/config.json"
+    fi
+
     # Wire ~/.zshrc to source the AI-native base (does not overwrite user content)
     wire_zshrc
 
