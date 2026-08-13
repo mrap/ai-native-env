@@ -19,6 +19,8 @@ cd ~/.ai-native-env && bash install.sh
 
 The installer symlinks dotfiles, wires your `~/.zshrc` to `source` the AI-native base (`zsh/ai-native.zsh`) without overwriting your file, copies Claude settings, seeds `~/.secrets` (chmod 600) if absent, configures git (prompts for name/email), and backs up any existing files to `.backup-YYYY-MM-DD`.
 
+On macOS it is fully turnkey from a bare machine: if Homebrew is missing it installs it first (official installer — expect a password prompt; Command Line Tools come with it), then offers to `brew install` any missing dependencies (tmux, nvim, fzf, starship).
+
 ## What's Included
 
 | Component | Target | Description |

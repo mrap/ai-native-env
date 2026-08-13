@@ -51,6 +51,36 @@ detect_platform() {
     esac
 }
 
+# --- Homebrew (macOS): install if missing, so one command works on a bare Mac ---
+# Override BREW_INSTALL_URL in tests to avoid a real install.
+BREW_INSTALL_URL="${BREW_INSTALL_URL:-https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh}"
+
+ensure_homebrew() {
+    [ "$PLATFORM" = "macos" ] || return 0
+
+    if command -v brew &>/dev/null; then
+        info "Homebrew found"
+        return 0
+    fi
+
+    warn "Homebrew not found — installing (you may be asked for your password)"
+    /bin/bash -c "$(curl -fsSL "$BREW_INSTALL_URL")"
+
+    # Put brew on PATH for the rest of this run (Apple Silicon, then Intel).
+    if [ -x /opt/homebrew/bin/brew ]; then
+        eval "$(/opt/homebrew/bin/brew shellenv)"
+    elif [ -x /usr/local/bin/brew ]; then
+        eval "$(/usr/local/bin/brew shellenv)"
+    fi
+
+    if ! command -v brew &>/dev/null; then
+        echo "Error: Homebrew install did not complete. Install manually: https://brew.sh"
+        exit 1
+    fi
+    ACTIONS+=("Installed Homebrew")
+    info "Homebrew installed"
+}
+
 # --- Check dependencies ---
 check_deps() {
     local missing=()
@@ -69,19 +99,21 @@ check_deps() {
 
     warn "Missing: ${missing[*]}"
     echo ""
-    if [ "$PLATFORM" = "linux" ]; then
+    if [ "$PLATFORM" = "macos" ] && command -v brew &>/dev/null; then
+        read -p "  Install with Homebrew now? [Y/n] " -r || true
+        if [[ ! ${REPLY:-} =~ ^[Nn]$ ]]; then
+            brew install "${missing[@]}"
+            ACTIONS+=("Installed via Homebrew: ${missing[*]}")
+            info "Installed: ${missing[*]}"
+            return 0
+        fi
+    elif [ "$PLATFORM" = "linux" ]; then
         if command -v apt-get &>/dev/null; then
             echo "  Install with: sudo apt-get install ${missing[*]}"
         elif command -v dnf &>/dev/null; then
             echo "  Install with: sudo dnf install ${missing[*]}"
         elif command -v pacman &>/dev/null; then
             echo "  Install with: sudo pacman -S ${missing[*]}"
-        fi
-    elif [ "$PLATFORM" = "macos" ]; then
-        if command -v brew &>/dev/null; then
-            echo "  Install with: brew install ${missing[*]}"
-        else
-            echo "  Install Homebrew first: https://brew.sh"
         fi
     fi
     echo ""
@@ -238,9 +270,12 @@ main() {
     echo "=== ai-native-env installer ==="
     echo ""
 
-    detect_repo
     detect_platform
     info "Platform: $PLATFORM"
+    # Homebrew before the clone: on a bare Mac, git itself arrives with the
+    # Command Line Tools that the Homebrew installer sets up.
+    ensure_homebrew
+    detect_repo
     info "Source: $REPO_DIR"
     echo ""
 
