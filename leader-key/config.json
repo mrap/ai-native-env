@@ -1,75 +1,100 @@
 {
-    "type": "group",
-    "actions": [
-        {
-            "key": "space",
-            "type": "application",
-            "value": "/Applications/Claude.app"
-        },
-        {
-            "key": "o",
-            "type": "application",
-            "value": "/Applications/Claude.app"
-        },
-        {
-            "key": "enter",
-            "type": "application",
-            "value": "/Applications/Google Chrome.app"
-        },
-        {
-            "key": "m",
-            "type": "application",
-            "value": "/System/Applications/Messages.app"
-        },
-        {
-            "key": "q",
-            "type": "application",
-            "value": "/Applications/Spotify.app"
-        },
-        {
-            "key": "t",
-            "type": "application",
-            "value": "/Applications/Ghostty.app"
-        },
-        {
-            "key": "c",
-            "type": "application",
-            "value": "/Applications/Akiflow.app"
-        },
-        {
-            "key": "e",
-            "type": "application",
-            "value": "/Applications/Superhuman.app"
-        },
-        {
-            "key": "f",
-            "type": "application",
-            "value": "/System/Library/CoreServices/Finder.app"
-        },
-        {
-            "key": "left",
-            "type": "url",
-            "value": "raycast://extensions/raycast/window-management/left-half"
-        },
-        {
-            "key": "right",
-            "type": "url",
-            "value": "raycast://extensions/raycast/window-management/right-half"
-        },
-        {
-            "key": "up",
-            "type": "url",
-            "value": "raycast://extensions/raycast/window-management/maximize"
-        },
-        {
-            "key": "down",
-            "type": "url",
-            "value": "raycast://extensions/raycast/window-management/maximize"
-        },
-        {
-            "key": "tab",
-            "type": "url",
-            "value": "raycast://extensions/raycast/window-management/next-display"
-        }
-    ]
+  "actions" : [
+    {
+      "key" : "space",
+      "type" : "application",
+      "value" : "/Applications/ChatGPT.app"
+    },
+    {
+      "key" : "o",
+      "type" : "application",
+      "value" : "/Applications/ChatGPT.app"
+    },
+    {
+      "key" : "enter",
+      "type" : "application",
+      "value" : "/Applications/Google Chrome.app"
+    },
+    {
+      "key" : "m",
+      "type" : "application",
+      "value" : "/System/Applications/Messages.app"
+    },
+    {
+      "key" : "q",
+      "type" : "application",
+      "value" : "/Applications/Spotify.app"
+    },
+    {
+      "key" : "t",
+      "type" : "application",
+      "value" : "/Applications/Ghostty.app"
+    },
+    {
+      "key" : "c",
+      "type" : "application",
+      "value" : "/Applications/Superfocus.app"
+    },
+    {
+      "key" : "e",
+      "type" : "application",
+      "value" : "/Applications/Superhuman.app"
+    },
+    {
+      "key" : "f",
+      "type" : "application",
+      "value" : "/System/Library/CoreServices/Finder.app"
+    },
+    {
+      "key" : "left",
+      "type" : "url",
+      "value" : "raycast://extensions/raycast/window-management/left-half"
+    },
+    {
+      "key" : "right",
+      "type" : "url",
+      "value" : "raycast://extensions/raycast/window-management/right-half"
+    },
+    {
+      "key" : "up",
+      "type" : "url",
+      "value" : "raycast://extensions/raycast/window-management/maximize"
+    },
+    {
+      "key" : "down",
+      "type" : "url",
+      "value" : "raycast://extensions/raycast/window-management/maximize"
+    },
+    {
+      "key" : "tab",
+      "type" : "url",
+      "value" : "raycast://extensions/raycast/window-management/move-to-next-display"
+    },
+    {
+      "key" : "1",
+      "type" : "application",
+      "value" : "/Applications/1Password.app"
+    },
+    {
+      "key" : "n",
+      "type" : "url",
+      "value" : "raycast://extensions/raycast/raycast-notes/raycast-notes"
+    },
+    {
+      "key" : ".",
+      "type" : "url",
+      "value" : "raycast://extensions/raycast/clipboard-history/clipboard-history"
+    },
+    {
+      "key" : "x",
+      "type" : "application",
+      "value" : "/Users/mrap/Applications/X.app"
+    },
+    {
+      "key" : "i",
+      "type" : "application",
+      "value" : "/Users/mrap/Applications/Instagram.app"
+    }
+  ],
+  "type" : "group"
 }
