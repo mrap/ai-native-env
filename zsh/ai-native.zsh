@@ -59,23 +59,42 @@ _ain_exec_answers() {
   # of orphaning it behind a shell wrapper (which is exactly the stuck-child
   # pile this guard exists to prevent). First output or clean exit within the
   # deadline = healthy; still alive at the deadline = wedged, so SIGKILL it.
-  emulate -L zsh
-  local deadline=$1; shift
-  local line
-  coproc { exec "$@" 2>/dev/null } 2>/dev/null
-  local pid=$!
-  if read -t "$deadline" -p line 2>/dev/null; then
-    return 0
-  fi
-  # Deadline hit with no output. If the process is still alive it is wedged in
-  # the exec/assessment path: kill it (guarding against an empty/zero pid, which
-  # would signal our own process group) and reap without blocking shell exit.
-  if [[ $pid == <1-> ]] && kill -0 "$pid" 2>/dev/null; then
-    kill -KILL "$pid" 2>/dev/null
-    { wait "$pid" } 2>/dev/null &!
-    return 1
-  fi
-  return 0
+  # The probe runs entirely inside a SUBSHELL, and that is load-bearing, not
+  # style. An INTERACTIVE shell reports background jobs from its own job table,
+  # so a coproc started in this function made every new shell print noise on
+  # its way to the prompt:
+  #   [5] 26696
+  #   [5]  + done       { exec "$@" 2> /dev/null; } 2> /dev/null
+  # Redirecting the command's stderr cannot suppress that (the notice is the
+  # shell's, not the command's), and `unsetopt monitor` only hides the start
+  # line: the `+ done` report is emitted later, at the next prompt, after any
+  # function-local options have already been restored. Owning the job in a
+  # subshell that exits immediately is what actually keeps it off the parent's
+  # job table. With two call sites (the starship probe below and the
+  # hex-completions probe in ~/.zshrc) the old behavior was four junk lines
+  # before every prompt.
+  # The subshell's exit status is the function's return value. coproc and kill
+  # do not need MONITOR, so behavior is otherwise unchanged; killing from
+  # inside the subshell still reaches the real process, because `exec` means
+  # the coproc pid IS the command rather than a shell wrapper around it.
+  (
+    emulate -L zsh
+    unsetopt monitor
+    local deadline=$1; shift
+    local line
+    coproc { exec "$@" 2>/dev/null } 2>/dev/null
+    local pid=$!
+    # First output or clean exit within the deadline = healthy.
+    read -t "$deadline" -p line 2>/dev/null && exit 0
+    # Deadline hit with no output. If the process is still alive it is wedged in
+    # the exec/assessment path, so kill it. The pid guard rejects an empty or
+    # zero pid, which would otherwise signal our own process group.
+    if [[ $pid == <1-> ]] && kill -0 "$pid" 2>/dev/null; then
+      kill -KILL "$pid" 2>/dev/null
+      exit 1
+    fi
+    exit 0
+  )
 }
 _ain_startup_probe() {
   (( AIN_SAFE_MODE )) && return          # forced by the caller or environment
