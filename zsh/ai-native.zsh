@@ -38,21 +38,85 @@ bindkey '^P' history-beginning-search-backward
 bindkey '^N' history-beginning-search-forward
 
 # =====================
+# Startup guard (stalled exec path)
+# =====================
+# Every optional tool init below execs a binary (nvm/npm, starship, brew, fzf,
+# zoxide). If the OS exec path is stalled (macOS Gatekeeper assessment backlog,
+# dead network mount), each of those execs can block for minutes and the shell
+# never reaches a prompt. So: probe the first external tool with a deadline.
+# If it does not answer in time, fall back to a plain prompt and skip the tool
+# inits. Loud by design: one stderr line says what happened and how to reload
+# (`ain-reload`) once the stall clears. Override the deadline with
+# AIN_EXEC_DEADLINE (seconds, fractional ok); force with AIN_SAFE_MODE=1.
+: "${AIN_EXEC_DEADLINE:=1.5}"
+typeset -gi AIN_SAFE_MODE=${AIN_SAFE_MODE:-0}
+typeset -g AIN_ZSH_FILE=${(%):-%x}
+_ain_exec_answers() {
+  # usage: _ain_exec_answers <deadline-seconds> <cmd> [args...]
+  # 0 if the command makes progress within the deadline, 1 if it is still
+  # wedged. No external `timeout`. The command runs via `exec` inside a coproc,
+  # so the coproc pid IS the command: a kill reaches the real process instead
+  # of orphaning it behind a shell wrapper (which is exactly the stuck-child
+  # pile this guard exists to prevent). First output or clean exit within the
+  # deadline = healthy; still alive at the deadline = wedged, so SIGKILL it.
+  emulate -L zsh
+  local deadline=$1; shift
+  local line
+  coproc { exec "$@" 2>/dev/null } 2>/dev/null
+  local pid=$!
+  if read -t "$deadline" -p line 2>/dev/null; then
+    return 0
+  fi
+  # Deadline hit with no output. If the process is still alive it is wedged in
+  # the exec/assessment path: kill it (guarding against an empty/zero pid, which
+  # would signal our own process group) and reap without blocking shell exit.
+  if [[ $pid == <1-> ]] && kill -0 "$pid" 2>/dev/null; then
+    kill -KILL "$pid" 2>/dev/null
+    { wait "$pid" } 2>/dev/null &!
+    return 1
+  fi
+  return 0
+}
+_ain_startup_probe() {
+  (( AIN_SAFE_MODE )) && return          # forced by the caller or environment
+  [[ -n ${AIN_SKIP_PROBE:-} ]] && return  # ain-reload: trust the caller
+  local tool=""
+  for tool in starship zoxide fzf; do
+    command -v "$tool" &>/dev/null && break
+    tool=""
+  done
+  [[ -z $tool ]] && return                # nothing heavy to protect
+  if ! _ain_exec_answers "$AIN_EXEC_DEADLINE" "$tool" --version; then
+    AIN_SAFE_MODE=1
+    print -u2 "ai-native: '$tool --version' did not answer within ${AIN_EXEC_DEADLINE}s (stalled exec path, e.g. macOS Gatekeeper backlog). Plain prompt; nvm/starship/fzf/zoxide init skipped. Run 'ain-reload' once it clears."
+  fi
+}
+ain-reload() { AIN_SAFE_MODE=0 AIN_SKIP_PROBE=1 source "$AIN_ZSH_FILE"; }
+_ain_startup_probe
+if (( AIN_SAFE_MODE )); then
+  PROMPT='%F{yellow}[safe]%f %F{cyan}%~%f %# '
+fi
+
+# =====================
 # nvm
 # =====================
 export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
-[ -s "$NVM_DIR/bash_completion" ] && . "$NVM_DIR/bash_completion"
+if (( ! AIN_SAFE_MODE )); then
+  [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+  [ -s "$NVM_DIR/bash_completion" ] && . "$NVM_DIR/bash_completion"
+fi
 
 # =====================
 # Starship prompt
 # =====================
-command -v starship &>/dev/null && eval "$(starship init zsh)"
+if (( ! AIN_SAFE_MODE )) && command -v starship &>/dev/null; then
+  eval "$(starship init zsh)"
+fi
 
 # =====================
 # fzf keybindings + history search
 # =====================
-if command -v fzf &>/dev/null; then
+if (( ! AIN_SAFE_MODE )) && command -v fzf &>/dev/null; then
   if [[ "$(uname)" == "Darwin" ]]; then
     _fzf_prefix="$(brew --prefix 2>/dev/null)/opt/fzf/shell"
   else
@@ -131,12 +195,22 @@ stty -ixon -ixoff 2>/dev/null
 # =====================
 # Homebrew (macOS, Apple Silicon)
 # =====================
-[ -x /opt/homebrew/bin/brew ] && eval "$(/opt/homebrew/bin/brew shellenv)"
+if [ -x /opt/homebrew/bin/brew ]; then
+  if (( AIN_SAFE_MODE )); then
+    # brew shellenv execs brew; in safe mode set the essential PATH statically.
+    export HOMEBREW_PREFIX=/opt/homebrew
+    export PATH="/opt/homebrew/bin:/opt/homebrew/sbin:$PATH"
+  else
+    eval "$(/opt/homebrew/bin/brew shellenv)"
+  fi
+fi
 
 # =====================
 # zoxide (smart cd)
 # =====================
-command -v zoxide &>/dev/null && eval "$(zoxide init zsh)"
+if (( ! AIN_SAFE_MODE )) && command -v zoxide &>/dev/null; then
+  eval "$(zoxide init zsh)"
+fi
 
 # =====================
 # bun
